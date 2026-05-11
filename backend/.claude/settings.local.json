@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m py_compile TravelCore/llm.py Memory/__init__.py TotalAgent/agent.py StrategyAgent/agent.py AnalysisAgent/agent.py app/config.py)",
+      "Bash(python -c \"from Memory import Memory; from TotalAgent.agent import TotalAgent; from StrategyAgent.agent import StrategyAgent; from AnalysisAgent.agent import AnalysisAgent; from ImageAgent.agent import ImageAgent; print\\('All imports OK'\\)\")",
+      "Bash(git checkout *)",
+      "Bash(python -c \"from TotalAgent.agent import TotalAgent; from StrategyAgent.agent import StrategyAgent; from QueryEngine.agent import QueryAgent; from AnalysisAgent.agent import AnalysisAgent; from ImageAgent.agent import ImageAgent; print\\('✓ All core agents import OK'\\)\")",
+      "Bash(python -c \"from TotalAgent.agent import TotalAgent; from StrategyAgent.agent import StrategyAgent; from QueryEngine.agent import QueryAgent; from AnalysisAgent.agent import AnalysisAgent; from ImageAgent.agent import ImageAgent; print\\('All core agents import OK'\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"from app.config import get_settings; s = get_settings\\(\\); print\\('siliconflow_api_key:', 'set' if s.siliconflow_api_key else 'NOT SET'\\); print\\('tavily_api_key:', 'set' if s.tavily_api_key else 'NOT SET'\\); print\\('siliconflow_base_url:', s.siliconflow_base_url\\); print\\('siliconflow_model:', s.siliconflow_model\\)\")",
+      "Bash(python test_full_flow.py)",
+      "Bash(python -c \"from fastapi.testclient import TestClient; print\\('TestClient available'\\)\")",
+      "Bash(python test_api.py)",
+      "Bash(python test_simple.py)"
+    ]
+  }
+}

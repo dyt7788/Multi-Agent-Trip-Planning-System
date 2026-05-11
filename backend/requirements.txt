@@ -1,0 +1,18 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+pydantic>=2.8.0
+pydantic-settings>=2.4.0
+python-dotenv>=1.0.1
+httpx>=0.27.0
+openai>=1.40.0
+python-multipart>=0.0.9
+loguru>=0.7.2
+
+# Optional OCR support. Tesseract itself must be installed on the host.
+pillow>=10.4.0
+pytesseract>=0.3.10
+
+# Optional Redis for short-term memory
+redis>=5.0.0
+
+# SiliconFlow uses OpenAI-compatible API, no additional packages needed

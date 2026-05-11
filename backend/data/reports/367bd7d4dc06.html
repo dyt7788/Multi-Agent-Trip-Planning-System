@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>武汉 旅行规划</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2937;
+      --muted: #667085;
+      --line: #e5e7eb;
+      --paper: #ffffff;
+      --accent: #0f766e;
+      --soft: #f0fdfa;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    /* Hero */
+    .hero {
+      position: relative;
+      height: 320px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0f766e 0%, #065f46 100%);
+    }
+    .hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.4;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding: 24px;
+    }
+    .hero-overlay h1 {
+      margin: 0 0 8px;
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .hero-overlay p {
+      max-width: 600px;
+      margin: 0;
+      font-size: 16px;
+      opacity: 0.9;
+    }
+    .hero-meta {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .hero-meta span {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+    main {
+      width: min(960px, calc(100% - 32px));
+      margin: -40px auto 56px;
+      position: relative;
+    }
+    .summary-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+    }
+    .summary-card p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--muted);
+    }
+    h2 {
+      margin: 0 0 16px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h2::before {
+      content: "";
+      width: 4px;
+      height: 22px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    .section {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .day {
+      padding-top: 20px;
+      margin-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+    .day:first-child {
+      padding-top: 0;
+      margin-top: 0;
+      border-top: none;
+    }
+    .day-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .day-header h3 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 600;
+    }
+    .day-theme {
+      background: var(--soft);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .slot {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 14px;
+      padding: 14px 0;
+      border-top: 1px solid var(--line);
+      align-items: start;
+    }
+    .slot:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+    .time {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      padding-top: 2px;
+    }
+    .slot-title {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .slot-desc {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0;
+    }
+    .slot-img {
+      width: 100%;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+    .tag {
+      text-align: right;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .tag-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .tag-cost {
+      display: block;
+      font-size: 12px;
+    }
+    ul { padding-left: 20px; margin: 8px 0; }
+    li { margin: 4px 0; }
+    a { color: var(--accent); }
+    .grid-images {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .grid-images img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+    @media (max-width: 640px) {
+      .hero { height: 220px; }
+      .hero-overlay h1 { font-size: 28px; }
+      .slot { grid-template-columns: 72px 1fr; }
+      .tag { grid-column: 2; text-align: left; }
+      .grid-images { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <img src="https://images.unsplash.com/photo-1688501325093-53c8e3305cdc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w5MzQ5OTB8MHwxfHNlYXJjaHwxfHwlRTYlQUQlQTYlRTYlQjElODklMjB0cmF2ZWwlMjBsYW5kc2NhcGV8ZW58MHwwfHx8MTc3ODQ3NzUyMnww&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1080" alt="武汉" />
+    <div class="hero-overlay">
+      <h1>武汉</h1>
+      <p>武汉3天旅行规划，结合攻略检索和用户偏好生成。</p>
+      <div class="hero-meta">
+        <span>3 天行程</span>
+        <span>预算: Not specified</span>
+      </div>
+    </div>
+  </div>
+  <main>
+    <div class="summary-card">
+      <h2>行程概览</h2>
+      <p>武汉3天旅行规划，结合攻略检索和用户偏好生成。</p>
+    </div>
+    <section class="section">
+      <h2>每日行程</h2>
+      
+        <article class="day">
+          <div class="day-header">
+            <h3>Day 1</h3>
+            <span class="day-theme">Day 1: 错过精华景点 + 覆盖绝大多数核心景点</span>
+          </div>
+          
+          
+        <div class="slot">
+          <div class="time">09:00</div>
+          <div>
+            <div class="slot-title">🏔️ 错过精华景点</div>
+            <p class="slot-desc">上午精力最充沛，适合安排核心景点。建议提前预约门票，避开人流高峰。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#3b82f622;color:#3b82f6">attraction</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+
+        <div class="slot">
+          <div class="time">12:00</div>
+          <div>
+            <div class="slot-title">🍜 还吃到了很多地道小吃</div>
+            <p class="slot-desc">午餐时段，就近选择上午行程附近的餐厅或特色小吃街，减少折返。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#f59e0b22;color:#f59e0b">food</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+
+        <div class="slot">
+          <div class="time">14:00</div>
+          <div>
+            <div class="slot-title">🏔️ 覆盖绝大多数核心景点</div>
+            <p class="slot-desc">下午适合安排展馆、文化街区或轻松的城市漫步。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#3b82f622;color:#3b82f6">attraction</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+
+        <div class="slot">
+          <div class="time">18:30</div>
+          <div>
+            <div class="slot-title">🍜 等特色小吃</div>
+            <p class="slot-desc">晚餐安排本地特色餐厅或美食街区，体验当地夜生活。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#f59e0b22;color:#f59e0b">food</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+        </article>
+        
+
+        <article class="day">
+          <div class="day-header">
+            <h3>Day 2</h3>
+            <span class="day-theme">Day 2: 覆盖绝大多数核心景点 + 昙华林等景点</span>
+          </div>
+          
+          
+        <div class="slot">
+          <div class="time">09:00</div>
+          <div>
+            <div class="slot-title">🏔️ 覆盖绝大多数核心景点</div>
+            <p class="slot-desc">上午精力最充沛，适合安排核心景点。建议提前预约门票，避开人流高峰。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#3b82f622;color:#3b82f6">attraction</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+
+        <div class="slot">
+          <div class="time">12:00</div>
+          <div>
+            <div class="slot-title">🍜 等特色小吃</div>
+            <p class="slot-desc">午餐时段，就近选择上午行程附近的餐厅或特色小吃街，减少折返。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#f59e0b22;color:#f59e0b">food</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+
+        <div class="slot">
+          <div class="time">14:00</div>
+          <div>
+            <div class="slot-title">🏔️ 昙华林等景点</div>
+            <p class="slot-desc">下午适合安排展馆、文化街区或轻松的城市漫步。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#3b82f622;color:#3b82f6">attraction</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+
+        <div class="slot">
+          <div class="time">18:30</div>
+          <div>
+            <div class="slot-title">🍜 四季美汤包等特色小吃</div>
+            <p class="slot-desc">晚餐安排本地特色餐厅或美食街区，体验当地夜生活。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#f59e0b22;color:#f59e0b">food</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+        </article>
+        
+
+        <article class="day">
+          <div class="day-header">
+            <h3>Day 3</h3>
+            <span class="day-theme">Day 3: 昙华林等景点 + 老城区离景点不远</span>
+          </div>
+          
+          
+        <div class="slot">
+          <div class="time">09:00</div>
+          <div>
+            <div class="slot-title">🏔️ 昙华林等景点</div>
+            <p class="slot-desc">上午精力最充沛，适合安排核心景点。建议提前预约门票，避开人流高峰。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#3b82f622;color:#3b82f6">attraction</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+
+        <div class="slot">
+          <div class="time">12:00</div>
+          <div>
+            <div class="slot-title">🍜 四季美汤包等特色小吃</div>
+            <p class="slot-desc">午餐时段，就近选择上午行程附近的餐厅或特色小吃街，减少折返。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#f59e0b22;color:#f59e0b">food</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+
+        <div class="slot">
+          <div class="time">14:00</div>
+          <div>
+            <div class="slot-title">🏔️ 老城区离景点不远</div>
+            <p class="slot-desc">下午适合安排展馆、文化街区或轻松的城市漫步。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#3b82f622;color:#3b82f6">attraction</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+
+        <div class="slot">
+          <div class="time">18:30</div>
+          <div>
+            <div class="slot-title">🍜 解锁更多汉味小吃</div>
+            <p class="slot-desc">晚餐安排本地特色餐厅或美食街区，体验当地夜生活。</p>
+            
+          </div>
+          <div class="tag">
+            <span class="tag-badge" style="background:#f59e0b22;color:#f59e0b">food</span>
+            <span class="tag-cost">0 CNY</span>
+          </div>
+        </div>
+        
+        </article>
+        
+    </section>
+    <section class="section">
+      <h2>亮点推荐</h2>
+      <ul><li>错过精华景点</li><li>覆盖绝大多数核心景点</li><li>昙华林等景点</li><li>老城区离景点不远</li><li>免费景点</li><li>湖北亲子景点榜</li><li>如果主要的活动范围是武昌</li><li>门票·活动</li><li>户外活动</li><li>知音号取票截止时间至演出前一个小时</li></ul>
+      <h2>推荐餐厅</h2>
+      <ul><li>还吃到了很多地道小吃</li><li>等特色小吃</li><li>四季美汤包等特色小吃</li><li>解锁更多汉味小吃</li><li>带我们吃了很多地道小吃</li></ul>
+      <h2>打包提示</h2>
+      <ul><li>靠谱的旅游攻略平台，最佳的武汉自助游、自由行、自驾游、跟团旅线路，海量武汉旅游景点图片、游记、交通、美食、购物、住宿、娱乐、行程、指南等旅游攻略信息，了解更多武汉旅游信息就来携程旅游攻略</li><li>* [31分钟前] YoYo\*\* 发表了湖北资讯 全程不累很轻松，管家安排到位，完美避开高峰期，哈哈哈，黄鹤楼、武大、长江大桥、巴公房子、户部巷、昙华</li><li>武汉三日两晚:中望国际旅行社推荐必去景点+美食攻略+交通指南</li><li># 武汉三日两晚:中望国际旅行社推荐必去景点+美食攻略+交通指南</li><li>选择中望国际旅行社专属行程，就能避开出行乱象，全程省心游玩，深度解锁武汉的美景与美食，不用费心做攻略，轻松玩转江城</li></ul>
+      <h2>风险提示</h2>
+      <ul><li>真实营业时间、门票和预约规则会变化，出发前需要二次确认。</li></ul>
+      <h2>参考来源</h2>
+      <ul><li><a href="https://you.ctrip.com/sight/wuhan145.html" target="_blank" rel="noopener">https://you.ctrip.com/sight/wuhan145.html</a></li><li><a href="https://cj.sina.cn/articles/view/7857141524/1d452771401901wxsa?froms=ggmp" target="_blank" rel="noopener">https://cj.sina.cn/articles/view/7857141524/1d452771401901wxsa?froms=ggmp</a></li><li><a href="https://post.smzdm.com/p/axkwknrw" target="_blank" rel="noopener">https://post.smzdm.com/p/axkwknrw</a></li><li><a href="https://zhuanlan.zhihu.com/p/389530845" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/389530845</a></li><li><a href="https://www.163.com/dy/article/KP48U7KF0556KX13.html" target="_blank" rel="noopener">https://www.163.com/dy/article/KP48U7KF0556KX13.html</a></li><li><a href="https://www.cunzj.com/note/671" target="_blank" rel="noopener">https://www.cunzj.com/note/671</a></li><li><a href="https://zhuanlan.zhihu.com/p/337379009" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/337379009</a></li><li><a href="https://zhuanlan.zhihu.com/p/31519864340" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/31519864340</a></li><li><a href="https://zhuanlan.zhihu.com/p/5360931718" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/5360931718</a></li><li><a href="https://hk.trip.com/moments/destination-wuhan-145/" target="_blank" rel="noopener">https://hk.trip.com/moments/destination-wuhan-145/</a></li><li><a href="https://zhuanlan.zhihu.com/p/391140310" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/391140310</a></li><li><a href="https://www.youtube.com/watch?v=gfX_GoJqtN0" target="_blank" rel="noopener">https://www.youtube.com/watch?v=gfX_GoJqtN0</a></li></ul>
+    </section>
+  </main>
+</body>
+</html>
